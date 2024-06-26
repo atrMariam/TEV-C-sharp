@@ -1,0 +1,43 @@
+# Ignore Visual Studio temporary files, build results, and
+# including .vs folder and .vsidx files
+.vs/
+*.vsidx
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Rider project directories
+.idea/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files
+Generated\ Files/
+
+# Backup & report files
+*.log
+*.bak
+*.orig
+*.class
+*.cache
+*.pdb
+*.tmp
+*.userprefs
+
+# Others
+*.swp
+*.swo
+*~
