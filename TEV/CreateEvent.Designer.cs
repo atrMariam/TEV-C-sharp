@@ -77,15 +77,13 @@
             flowLayoutPanel1 = new FlowLayoutPanel();
             buttonAddEvent = new Button();
             buttonDeleteEvent = new Button();
-            button2 = new Button();
-            buttonUpdateEvent = new Button();
             flowLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // comboBoxCategory
             // 
             comboBoxCategory.FormattingEnabled = true;
-            comboBoxCategory.Location = new Point(509, 23);
+            comboBoxCategory.Location = new Point(417, 23);
             comboBoxCategory.Name = "comboBoxCategory";
             comboBoxCategory.Size = new Size(121, 23);
             comboBoxCategory.TabIndex = 0;
@@ -94,7 +92,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(353, 31);
+            label1.Location = new Point(261, 31);
             label1.Name = "label1";
             label1.Size = new Size(140, 15);
             label1.TabIndex = 1;
@@ -507,6 +505,7 @@
             // 
             // flowLayoutPanel1
             // 
+            flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             flowLayoutPanel1.Controls.Add(labelCode);
             flowLayoutPanel1.Controls.Add(textBoxCode);
             flowLayoutPanel1.Controls.Add(labelReference);
@@ -552,17 +551,18 @@
             flowLayoutPanel1.Controls.Add(labelAltitude);
             flowLayoutPanel1.Controls.Add(textBoxAltitude);
             flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanel1.Location = new Point(138, 66);
+            flowLayoutPanel1.Location = new Point(46, 66);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(5);
-            flowLayoutPanel1.Size = new Size(778, 402);
+            flowLayoutPanel1.Size = new Size(754, 402);
             flowLayoutPanel1.TabIndex = 50;
             // 
             // buttonAddEvent
             // 
+            buttonAddEvent.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             buttonAddEvent.BackColor = SystemColors.Highlight;
             buttonAddEvent.ForeColor = Color.White;
-            buttonAddEvent.Location = new Point(855, 505);
+            buttonAddEvent.Location = new Point(739, 505);
             buttonAddEvent.Margin = new Padding(1);
             buttonAddEvent.Name = "buttonAddEvent";
             buttonAddEvent.Padding = new Padding(2);
@@ -574,9 +574,10 @@
             // 
             // buttonDeleteEvent
             // 
+            buttonDeleteEvent.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             buttonDeleteEvent.BackColor = Color.FromArgb(255, 192, 128);
             buttonDeleteEvent.ForeColor = Color.White;
-            buttonDeleteEvent.Location = new Point(135, 505);
+            buttonDeleteEvent.Location = new Point(43, 505);
             buttonDeleteEvent.Margin = new Padding(1);
             buttonDeleteEvent.Name = "buttonDeleteEvent";
             buttonDeleteEvent.Padding = new Padding(2);
@@ -586,40 +587,12 @@
             buttonDeleteEvent.UseVisualStyleBackColor = false;
             buttonDeleteEvent.Click += buttonClear_Click;
             // 
-            // button2
-            // 
-            button2.BackColor = Color.Red;
-            button2.ForeColor = Color.White;
-            button2.Location = new Point(353, 505);
-            button2.Margin = new Padding(1);
-            button2.Name = "button2";
-            button2.Padding = new Padding(2);
-            button2.Size = new Size(64, 36);
-            button2.TabIndex = 53;
-            button2.Text = "Delete";
-            button2.UseVisualStyleBackColor = false;
-            // 
-            // buttonUpdateEvent
-            // 
-            buttonUpdateEvent.BackColor = Color.FromArgb(255, 128, 0);
-            buttonUpdateEvent.ForeColor = Color.White;
-            buttonUpdateEvent.Location = new Point(607, 505);
-            buttonUpdateEvent.Margin = new Padding(1);
-            buttonUpdateEvent.Name = "buttonUpdateEvent";
-            buttonUpdateEvent.Padding = new Padding(2);
-            buttonUpdateEvent.Size = new Size(63, 36);
-            buttonUpdateEvent.TabIndex = 54;
-            buttonUpdateEvent.Text = "Update";
-            buttonUpdateEvent.UseVisualStyleBackColor = false;
-            // 
             // CreateEvent
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            ClientSize = new Size(994, 569);
-            Controls.Add(buttonUpdateEvent);
-            Controls.Add(button2);
+            ClientSize = new Size(855, 569);
             Controls.Add(buttonDeleteEvent);
             Controls.Add(buttonAddEvent);
             Controls.Add(flowLayoutPanel1);
@@ -685,7 +658,5 @@
         private FlowLayoutPanel flowLayoutPanel1;
         private Button buttonAddEvent;
         private Button buttonDeleteEvent;
-        private Button button2;
-        private Button buttonUpdateEvent;
     }
 }

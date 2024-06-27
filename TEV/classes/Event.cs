@@ -10,7 +10,7 @@ namespace TEV.classes
 {
     public class Event
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string category { get; set; }
         public string code { get; set; }
         public string reference {get; set;}
@@ -45,12 +45,12 @@ namespace TEV.classes
             DataTable dt = new DataTable();
             try
             {
-                string sql = @"SELECT e.code, e.reference, e.source, e.notification_date, e.location, e.involved_traffic, e.description,
+                string sql = @"SELECT e.id as Id, e.code, e.reference, e.source, e.notification_date, e.location, e.involved_traffic, e.description,
                     t.name AS type, 
                     c.name AS categorie
                     FROM events e
-                    JOIN categories c ON e.category_id = c.id
-                    JOIN event_types t ON e.event_type_id = t.id";
+                    LEFT JOIN categories c ON e.category_id = c.id
+                    LEFT JOIN event_types t ON e.event_type_id = t.id";
 
                 SQLiteCommand cmd = new SQLiteCommand(sql, con);
                 SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
@@ -211,7 +211,7 @@ namespace TEV.classes
             return eventFormVisibility;
         }
 
-        public Boolean InsertEvent(Event e){
+        public bool InsertEvent(Event e){
 
             //creating a default return type and etting its value to false
             bool isSuccess = false;
@@ -310,5 +310,103 @@ namespace TEV.classes
             return isSuccess;
         }
 
+        public bool UpdateEvent(Event e)
+        {
+            //creating a default return type and etting its value to false
+            bool isSuccess = false;
+            SQLiteConnection con = new SQLiteConnection(connectionString);
+            try
+            {
+                string sql = @"UPDATE events SET
+                    category_id=(SELECT id FROM categories WHERE name=@categoryname), -- category_id,
+                    code=@code,
+                    reference=@reference,
+                    source=@source,
+                    occurrence_date=@occurrence_date,
+                    notification_date=@notification_date,
+                    event_type_id=(SELECT id FROM event_types WHERE name=@type),
+                    location=@location,
+                    involved_traffic=@traffic,
+                    description=@description,
+                    event_cause_id=(SELECT id FROM event_causes WHERE text=@cause),
+                    frequency=@frequency,
+                    severity=@severity,
+                    classe=@classe,
+                    security_recommendation=@security_recommendation,
+                    event_status_id=(SELECT id FROM event_statuses WHERE name=@status),
+                    color=@color,
+                    flight_phase=@flight_phase,
+                    altitude=@altitude,
+                    report_elaboration_date=@report_elaboration_date,
+                    report_reception_date=@report_reception_date,
+                    last_elm_reception_date=@last_elm_reception_date,
+                    recommendations_release_date=@recommendations_release_date,
+                    evidence_reception_date=@evidence_reception_date
+                    WHERE id=@eventId";
+                SQLiteCommand cmd = new SQLiteCommand(sql, con);
+                cmd.Parameters.AddWithValue("@eventId", e.id);
+                cmd.Parameters.AddWithValue("@categoryname", e.category);
+                cmd.Parameters.AddWithValue("@code", e.code);
+                cmd.Parameters.AddWithValue("@reference", e.reference);
+                cmd.Parameters.AddWithValue("@source", e.source);
+                cmd.Parameters.AddWithValue("@occurrence_date", e.occurrence_date);
+                cmd.Parameters.AddWithValue("@notification_date", e.notification_date);
+                cmd.Parameters.AddWithValue("@type", e.eventType);
+                cmd.Parameters.AddWithValue("@location", e.location);
+                cmd.Parameters.AddWithValue("@traffic", e.involved_traffic);
+                cmd.Parameters.AddWithValue("@description", e.description);
+                cmd.Parameters.AddWithValue("@cause", e.event_cause);
+                cmd.Parameters.AddWithValue("@frequency", e.frequency);
+                cmd.Parameters.AddWithValue("@severity", e.severity);
+                cmd.Parameters.AddWithValue("@classe", $"{e.severity} {e.frequency}");
+                cmd.Parameters.AddWithValue("@security_recommendation", e.security_recommendation);
+                cmd.Parameters.AddWithValue("@color", e.color);
+                cmd.Parameters.AddWithValue("@flight_phase", e.flight_phase);
+                cmd.Parameters.AddWithValue("@altitude", e.altitude);
+                cmd.Parameters.AddWithValue("@report_elaboration_date", e.report_elaboration_date);
+                cmd.Parameters.AddWithValue("@report_reception_date", e.report_reception_date);
+                cmd.Parameters.AddWithValue("@last_elm_reception_date", e.last_elm_reception_date);
+                cmd.Parameters.AddWithValue("@recommendations_release_date", e.recommendations_release_date);
+                cmd.Parameters.AddWithValue("@evidence_reception_date", e.evidence_reception_date);
+                cmd.Parameters.AddWithValue("@status", e.event_status);
+
+                con.Open();
+                int rows = cmd.ExecuteNonQuery();
+                isSuccess = rows > 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                con.Close();
+            }
+            return isSuccess;
+        }
+        public bool DeleteEvent(Event e)
+        {
+            //creating a default return type and etting its value to false
+            bool isSuccess = false;
+            SQLiteConnection con = new SQLiteConnection(connectionString);
+            try
+            {
+                string sql = "DELETE FROM events WHERE id=@id";
+                SQLiteCommand cmd = new SQLiteCommand(sql, con);
+                cmd.Parameters.AddWithValue("@id", e.id);
+                con.Open();
+                int rows = cmd.ExecuteNonQuery();
+                isSuccess = rows > 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                con.Close();
+            }
+            return isSuccess;
+        }
     }
 }

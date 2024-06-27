@@ -31,6 +31,9 @@
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             dataGridView1 = new DataGridView();
             buttonCreateEvent = new Button();
+            buttonDeleteEvent = new Button();
+            buttonEditerEvent = new Button();
+            buttonShowEventDetails = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -61,11 +64,48 @@
             buttonCreateEvent.UseVisualStyleBackColor = true;
             buttonCreateEvent.Click += buttonCreateEvent_Click;
             // 
+            // buttonDeleteEvent
+            // 
+            buttonDeleteEvent.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonDeleteEvent.BackColor = Color.FromArgb(255, 128, 128);
+            buttonDeleteEvent.Location = new Point(811, 57);
+            buttonDeleteEvent.Name = "buttonDeleteEvent";
+            buttonDeleteEvent.Size = new Size(75, 23);
+            buttonDeleteEvent.TabIndex = 2;
+            buttonDeleteEvent.Text = "Supprimer";
+            buttonDeleteEvent.UseVisualStyleBackColor = false;
+            buttonDeleteEvent.Click += buttonDeleteEvent_Click;
+            // 
+            // buttonEditerEvent
+            // 
+            buttonEditerEvent.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonEditerEvent.BackColor = Color.FromArgb(255, 192, 128);
+            buttonEditerEvent.Location = new Point(892, 57);
+            buttonEditerEvent.Name = "buttonEditerEvent";
+            buttonEditerEvent.Size = new Size(75, 23);
+            buttonEditerEvent.TabIndex = 3;
+            buttonEditerEvent.Text = "Editer";
+            buttonEditerEvent.UseVisualStyleBackColor = false;
+            buttonEditerEvent.Click += buttonEditerEvent_Click;
+            // 
+            // buttonShowEventDetails
+            // 
+            buttonShowEventDetails.Location = new Point(123, 57);
+            buttonShowEventDetails.Name = "buttonShowEventDetails";
+            buttonShowEventDetails.Size = new Size(75, 23);
+            buttonShowEventDetails.TabIndex = 4;
+            buttonShowEventDetails.Text = "Details";
+            buttonShowEventDetails.UseVisualStyleBackColor = true;
+            buttonShowEventDetails.Click += buttonShowEventDetails_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1011, 476);
+            Controls.Add(buttonShowEventDetails);
+            Controls.Add(buttonEditerEvent);
+            Controls.Add(buttonDeleteEvent);
             Controls.Add(buttonCreateEvent);
             Controls.Add(dataGridView1);
             Name = "Form1";
@@ -80,5 +120,8 @@
 
         private DataGridView dataGridView1;
         private Button buttonCreateEvent;
+        private Button buttonDeleteEvent;
+        private Button buttonEditerEvent;
+        private Button buttonShowEventDetails;
     }
 }

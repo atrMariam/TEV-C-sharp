@@ -163,8 +163,6 @@ namespace TEV
 
         }
 
-
-
         private void buttonClear_Click(object sender, EventArgs e)
         {
             Clear();
