@@ -67,7 +67,8 @@ namespace TEV.classes
             }
             return dt;
         }
-       public List<string> selectCategories()
+        
+        public List<string> selectCategories()
        {
             List<string> categories = new List<string>();
             try
@@ -91,7 +92,73 @@ namespace TEV.classes
                 MessageBox.Show("Error loading categories: " + ex.Message);
             }
             return categories;
-       }
+        }
+        public List<string> selectCategoryByEventId()
+        {
+            List<string> categories = new List<string>();
+            try
+            {
+                using (SQLiteConnection con = new SQLiteConnection(connectionString))
+                {
+                    string sql = "SELECT c.name AS category FROM events e LEFT JOIN categories c ON e.category_id = c.id ";
+                    SQLiteCommand cmd = new SQLiteCommand(sql, con);
+                    con.Open();
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            categories.Add(reader.GetString(reader.GetOrdinal("category")));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading categories: " + ex.Message);
+            }
+            return categories;
+        }
+        public Category getEventCategoryAndVisibility(string category)
+        {
+            Category eventFormVisibility = new Category();
+            using (SQLiteConnection con = new SQLiteConnection(connectionString))
+            {
+                string sql = "SELECT * FROM categories WHERE name=@category";
+                SQLiteCommand cmd = new SQLiteCommand(sql, con);
+                cmd.Parameters.AddWithValue("@category", category);
+                con.Open();
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        eventFormVisibility.show_code = reader.GetBoolean(reader.GetOrdinal("show_code"));
+                        eventFormVisibility.show_reference = reader.GetBoolean(reader.GetOrdinal("show_reference"));
+                        eventFormVisibility.show_source = reader.GetBoolean(reader.GetOrdinal("show_source"));
+                        eventFormVisibility.show_occurrence_date = reader.GetBoolean(reader.GetOrdinal("show_occurrence_date"));
+                        eventFormVisibility.show_notification_date = reader.GetBoolean(reader.GetOrdinal("show_notification_date"));
+                        eventFormVisibility.show_eventType = reader.GetBoolean(reader.GetOrdinal("show_eventType"));
+                        eventFormVisibility.show_location = reader.GetBoolean(reader.GetOrdinal("show_location"));
+                        eventFormVisibility.show_involved_traffic = reader.GetBoolean(reader.GetOrdinal("show_involved_traffic"));
+                        eventFormVisibility.show_description = reader.GetBoolean(reader.GetOrdinal("show_description"));
+                        eventFormVisibility.show_event_cause = reader.GetBoolean(reader.GetOrdinal("show_event_cause"));
+                        eventFormVisibility.show_frequency = reader.GetBoolean(reader.GetOrdinal("show_frequency"));
+                        eventFormVisibility.show_severity = reader.GetBoolean(reader.GetOrdinal("show_severity"));
+                        //eventFormVisibility.show_classe = reader.GetBoolean(reader.GetOrdinal(""));
+                        eventFormVisibility.show_security_recommendation = reader.GetBoolean(reader.GetOrdinal("show_security_recommendation"));
+                        eventFormVisibility.show_event_status = reader.GetBoolean(reader.GetOrdinal("show_event_status"));
+                        eventFormVisibility.show_color = reader.GetBoolean(reader.GetOrdinal("show_color"));
+                        eventFormVisibility.show_flight_phase = reader.GetBoolean(reader.GetOrdinal("show_flight_phase"));
+                        eventFormVisibility.show_altitude = reader.GetBoolean(reader.GetOrdinal("show_altitude"));
+                        eventFormVisibility.show_report_elaboration_date = reader.GetBoolean(reader.GetOrdinal("show_report_elaboration_date"));
+                        eventFormVisibility.show_report_reception_date = reader.GetBoolean(reader.GetOrdinal("show_report_reception_date"));
+                        eventFormVisibility.show_last_elm_reception_date = reader.GetBoolean(reader.GetOrdinal("show_last_elm_reception_date"));
+                        eventFormVisibility.show_recommendations_release_date = reader.GetBoolean(reader.GetOrdinal("show_recommendations_release_date"));
+                        eventFormVisibility.show_evidence_reception_date = reader.GetBoolean(reader.GetOrdinal("show_evidence_reception_date"));
+                    }
+                }
+            }
+            return eventFormVisibility;
+        }
         public List<string> selectEventTypes(String selectedEventCategory)
         {
             List<string> list = new List<string>();
@@ -167,48 +234,6 @@ namespace TEV.classes
                 MessageBox.Show("Error loading event status: " + ex.Message);
             }
             return list;
-        }
-
-        public EventFormVisibility getEventCategoriesAndVisibility(string category)
-        {
-            EventFormVisibility eventFormVisibility = new EventFormVisibility();
-            using (SQLiteConnection con = new SQLiteConnection(connectionString))
-            {
-                string sql = "SELECT * FROM categories WHERE name=@category";
-                SQLiteCommand cmd = new SQLiteCommand(sql, con);
-                cmd.Parameters.AddWithValue("@category", category);
-                con.Open();
-                using (SQLiteDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        eventFormVisibility.show_code = reader.GetBoolean(reader.GetOrdinal("show_code"));
-                        eventFormVisibility.show_reference = reader.GetBoolean(reader.GetOrdinal("show_reference"));
-                        eventFormVisibility.show_source = reader.GetBoolean(reader.GetOrdinal("show_source"));
-                        eventFormVisibility.show_occurrence_date = reader.GetBoolean(reader.GetOrdinal("show_occurrence_date"));
-                        eventFormVisibility.show_notification_date = reader.GetBoolean(reader.GetOrdinal("show_notification_date"));
-                        eventFormVisibility.show_eventType = reader.GetBoolean(reader.GetOrdinal("show_eventType"));
-                        eventFormVisibility.show_location = reader.GetBoolean(reader.GetOrdinal("show_location"));
-                        eventFormVisibility.show_involved_traffic = reader.GetBoolean(reader.GetOrdinal("show_involved_traffic"));
-                        eventFormVisibility.show_description = reader.GetBoolean(reader.GetOrdinal("show_description"));
-                        eventFormVisibility.show_event_cause = reader.GetBoolean(reader.GetOrdinal("show_event_cause"));
-                        eventFormVisibility.show_frequency = reader.GetBoolean(reader.GetOrdinal("show_frequency"));
-                        eventFormVisibility.show_severity = reader.GetBoolean(reader.GetOrdinal("show_severity"));
-                        //eventFormVisibility.show_classe = reader.GetBoolean(reader.GetOrdinal(""));
-                        eventFormVisibility.show_security_recommendation = reader.GetBoolean(reader.GetOrdinal("show_security_recommendation"));
-                        eventFormVisibility.show_event_status = reader.GetBoolean(reader.GetOrdinal("show_event_status"));
-                        eventFormVisibility.show_color = reader.GetBoolean(reader.GetOrdinal("show_color"));
-                        eventFormVisibility.show_flight_phase = reader.GetBoolean(reader.GetOrdinal("show_flight_phase"));
-                        eventFormVisibility.show_altitude = reader.GetBoolean(reader.GetOrdinal("show_altitude"));
-                        eventFormVisibility.show_report_elaboration_date = reader.GetBoolean(reader.GetOrdinal("show_report_elaboration_date"));
-                        eventFormVisibility.show_report_reception_date = reader.GetBoolean(reader.GetOrdinal("show_report_reception_date"));
-                        eventFormVisibility.show_last_elm_reception_date = reader.GetBoolean(reader.GetOrdinal("show_last_elm_reception_date"));
-                        eventFormVisibility.show_recommendations_release_date = reader.GetBoolean(reader.GetOrdinal("show_recommendations_release_date"));
-                        eventFormVisibility.show_evidence_reception_date = reader.GetBoolean(reader.GetOrdinal("show_evidence_reception_date"));
-                    }
-                }
-            }
-            return eventFormVisibility;
         }
 
         public bool InsertEvent(Event e){
@@ -309,7 +334,6 @@ namespace TEV.classes
             }
             return isSuccess;
         }
-
         public bool UpdateEvent(Event e)
         {
             //creating a default return type and etting its value to false

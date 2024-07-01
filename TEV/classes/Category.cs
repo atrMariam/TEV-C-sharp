@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TEV.classes
 {
-    public class EventFormVisibility
+    public class Category
     {
+        public int id;
+        public bool name { get; set; }
         public bool show_code { get; set; }
         public bool show_reference {get; set; }
         public bool show_source {get; set; }

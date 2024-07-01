@@ -83,8 +83,11 @@ namespace TEV
             if (dataGridView1.SelectedRows.Count > 0)
             {
                 DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
-                string id = selectedRow.Cells["Id"].Value.ToString();
-                MessageBox.Show(id);
+                int selectedEventId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["id"].Value);
+
+                CreateEvent createEvent = new CreateEvent(selectedEventId, true);
+                createEvent.DataUpdated += new EventHandler(Form1_Load);
+                createEvent.ShowDialog();
             }
             else
             {
