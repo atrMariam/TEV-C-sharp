@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +11,7 @@ namespace TEV.classes
 {
     public class Helper
     {
-        Event evnt = new Event();
+        private Event evnt = new Event();
         public List<ControlMetadata> GetControlMetadata(string category)
         {
             // Fetch the field visibility settings from the database based on the category
@@ -162,8 +164,6 @@ namespace TEV.classes
             }
         }
 
-
-
         public Event RetrieveFormData(Control parentControl, List<ControlMetadata> controlMetadataList)
         {
             // Get the values from the input fields, checking if they are visible
@@ -282,5 +282,33 @@ namespace TEV.classes
                 }
             }
         }
+
+        public void FillObjectFromReader(SQLiteDataReader reader, object obj)
+        {
+            foreach (var property in obj.GetType().GetProperties())
+            {
+                if (reader.HasColumn(property.Name) && !reader.IsDBNull(reader.GetOrdinal(property.Name)))
+                {
+                    property.SetValue(obj, reader[property.Name]);
+                }
+            }
+        }
     }
+
+    //https://learn.microsoft.com/en-us/dotnet/api/system.data.datareaderextensions?view=net-8.0#applies-to
+    public static class DataReaderExtensions
+    {
+        public static bool HasColumn(this IDataRecord reader, string columnName)
+        {
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                if (reader.GetName(i).Equals(columnName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
 }

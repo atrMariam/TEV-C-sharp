@@ -17,7 +17,7 @@ namespace TEV.classes
         public string source {get; set;}
         public DateTime occurrence_date {get; set;}
         public DateTime notification_date {get; set;}
-        public string eventType {get; set;}
+        public string event_type {get; set;}
         public string location {get; set;}
         public string involved_traffic {get; set;}
         public string description {get; set;}
@@ -25,6 +25,7 @@ namespace TEV.classes
         public string frequency {get; set;}
         public string severity {get; set;}
         public string security_recommendation {get; set;}
+        public string classe { get; set; }
         public string event_status {get; set;}
         public string color {get; set;}
         public string flight_phase {get; set;}
@@ -34,7 +35,7 @@ namespace TEV.classes
         public DateTime last_elm_reception_date {get; set;}
         public DateTime recommendations_release_date {get; set;}
         public DateTime evidence_reception_date {get; set;}
-
+        
         static string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         static string databasePath = Path.Combine(desktopPath, "TEV/database.db");
         static string connectionString = $"Data Source=\"{databasePath}\";Version=3;";
@@ -67,7 +68,36 @@ namespace TEV.classes
             }
             return dt;
         }
-        
+        public Event GetEventById(int eventId)
+        {
+            Event eventObj = new Event();
+            Helper helper = new Helper();
+
+            using (SQLiteConnection con = new SQLiteConnection(connectionString))
+            {
+                string sql = @"SELECT 
+                    code,c.name AS category,reference,source,occurrence_date,notification_date,t.name as event_type,location,involved_traffic,description,ca.text AS event_cause,frequency,severity, security_recommendation,classe,s.name AS event_status,e.color as color,flight_phase,altitude,report_elaboration_date,report_reception_date,last_elm_reception_date,recommendations_release_date,evidence_reception_date
+                    FROM events e
+                    LEFT JOIN categories c ON e.category_id = c.id
+                    LEFT JOIN event_types t ON e.event_type_id = t.id
+                    LEFT JOIN event_causes ca ON e.event_cause_id = ca.id
+                    LEFT JOIN event_statuses s ON e.event_cause_id = s.id
+                    WHERE e.id = @eventId";
+                SQLiteCommand cmd = new SQLiteCommand(sql, con);
+                cmd.Parameters.AddWithValue("@eventId", eventId);
+                con.Open();
+
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        helper.FillObjectFromReader(reader, eventObj);
+                    }
+                }
+            }
+
+            return eventObj;
+        }
         public List<string> selectCategories()
        {
             List<string> categories = new List<string>();
@@ -93,15 +123,16 @@ namespace TEV.classes
             }
             return categories;
         }
-        public List<string> selectCategoryByEventId()
+        public List<string> selectCategoryByEventId(String eventId)
         {
             List<string> categories = new List<string>();
             try
             {
                 using (SQLiteConnection con = new SQLiteConnection(connectionString))
                 {
-                    string sql = "SELECT c.name AS category FROM events e LEFT JOIN categories c ON e.category_id = c.id ";
+                    string sql = "SELECT c.name AS category FROM events e LEFT JOIN categories c ON e.category_id = c.id WHERE e.id=@eventId";
                     SQLiteCommand cmd = new SQLiteCommand(sql, con);
+                    cmd.Parameters.AddWithValue("@eventId", eventId);
                     con.Open();
                     using (SQLiteDataReader reader = cmd.ExecuteReader())
                     {
@@ -301,7 +332,7 @@ namespace TEV.classes
                 cmd.Parameters.AddWithValue("@source", e.source);
                 cmd.Parameters.AddWithValue("@occurrence_date", e.occurrence_date);
                 cmd.Parameters.AddWithValue("@notification_date", e.notification_date);
-                cmd.Parameters.AddWithValue("@type", e.eventType);
+                cmd.Parameters.AddWithValue("@type", e.event_type);
                 cmd.Parameters.AddWithValue("@location", e.location);
                 cmd.Parameters.AddWithValue("@traffic", e.involved_traffic);
                 cmd.Parameters.AddWithValue("@description", e.description);
@@ -375,7 +406,7 @@ namespace TEV.classes
                 cmd.Parameters.AddWithValue("@source", e.source);
                 cmd.Parameters.AddWithValue("@occurrence_date", e.occurrence_date);
                 cmd.Parameters.AddWithValue("@notification_date", e.notification_date);
-                cmd.Parameters.AddWithValue("@type", e.eventType);
+                cmd.Parameters.AddWithValue("@type", e.event_type);
                 cmd.Parameters.AddWithValue("@location", e.location);
                 cmd.Parameters.AddWithValue("@traffic", e.involved_traffic);
                 cmd.Parameters.AddWithValue("@description", e.description);

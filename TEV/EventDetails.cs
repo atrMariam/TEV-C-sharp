@@ -41,35 +41,33 @@ namespace TEV
 
         public void LoadEventDetails(int id)
         {
-            using (SQLiteConnection con = new SQLiteConnection(connectionString))
+            Event e = evnt.GetEventById(id);
+//          comboBoxCategory.SelectedItem = e.category;
+            List<ControlMetadata> controlMetadataList = helper.GetControlMetadata(e.category);
+            helper.GenerateControls(controlMetadataList, panelControls);
+            helper.PopulateComboBoxs(e.category, panelControls);
+            foreach (var metadata in controlMetadataList)
             {
-                string sql = @"SELECT 
-                    code,c.name AS category,reference,source,occurrence_date,notification_date,t.name as event_type,location,involved_traffic,description,ca.text AS event_cause,frequency,severity,classe,s.name AS event_status,e.color as color,flight_phase,altitude,report_elaboration_date,report_reception_date,recommendations_release_date,evidence_reception_date
-                    FROM events e
-                    LEFT JOIN categories c ON e.category_id = c.id
-                    LEFT JOIN event_types t ON e.event_type_id = t.id
-                    LEFT JOIN event_causes ca ON e.event_cause_id = ca.id
-                    LEFT JOIN event_statuses s ON e.event_cause_id = s.id
-                    WHERE e.id = @EventId";
-                SQLiteCommand cmd = new SQLiteCommand(sql, con);
-                cmd.Parameters.AddWithValue("@EventId", id);
-                con.Open();
-                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                if (metadata.IsVisible)
                 {
-                    if (reader.Read())
-                    {
-                        var controlMetadataList = helper.GetControlMetadata(eventCategory);
+                    // Find the control by name
+                    var control = Controls.Find(metadata.ControlName, true).FirstOrDefault();
+                    // Skip if the control is not found
+                    if (control == null) continue;
 
-                        foreach (var metadata in controlMetadataList)
-                        {
-                            if (metadata.IsVisible)
-                            {
-                                if (Controls.Find(metadata.ControlName, true).FirstOrDefault() is TextBox txt)
-                                {
-                                    txt.Text = reader[metadata.DatabaseField].ToString();
-                                }
-                            }
-                        }
+                    var propertyValue = typeof(Event).GetProperty(metadata.DatabaseField)?.GetValue(e);
+
+                    if (control is TextBox txt && propertyValue != null)
+                    {
+                        txt.Text = propertyValue.ToString();
+                    }
+                    else if (control is ComboBox comboBox && propertyValue != null)
+                    {
+                        comboBox.SelectedItem = propertyValue.ToString();
+                    }
+                    else if (control is DateTimePicker date && propertyValue is DateTime dateValue)
+                    {
+                        date.Value = dateValue;
                     }
                 }
             }

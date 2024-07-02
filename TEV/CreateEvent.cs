@@ -6,18 +6,17 @@ namespace TEV
 {
     public partial class CreateEvent : Form
     {
+        Helper helper = new Helper();
         public event EventHandler DataUpdated;
         private bool isEditMode;
-        Event evnt = new Event();
-        Helper helper = new Helper();
+        Event evnt;
         List<ControlMetadata> controlMetadataList;
-        int selectedEventId;
 
-        public CreateEvent(int selectedEventId = 0, bool editMode = false)
+        public CreateEvent(Event evt = null, bool editMode = false)
         {
             InitializeComponent();
             this.isEditMode = editMode;
-            this.selectedEventId = selectedEventId;
+            this.evnt = (evt!=null) ? evt : new Event() ;
         }
 
         protected virtual void OnDataUpdated(EventArgs e)
@@ -36,15 +35,45 @@ namespace TEV
             }
             if (isEditMode)
             {
-                buttonSubmit.Text = "Update Event";
+                buttonSubmit.Text = "Update";
                 FillFormFromEvent(evnt);
             }
-            buttonSubmit.Text = "Create Event";
+            else
+            {
+                buttonSubmit.Text = "Create";
+            }
         }
 
         public void FillFormFromEvent(Event e)
         {
-            // fill inputs ??
+            comboBoxCategory.SelectedItem = e.category;
+            List<ControlMetadata> controlMetadataList = helper.GetControlMetadata(e.category);
+            helper.GenerateControls(controlMetadataList, panel1);
+            foreach (var metadata in controlMetadataList)
+            {
+                if (metadata.IsVisible)
+                {
+                    // Find the control by name
+                    var control = Controls.Find(metadata.ControlName, true).FirstOrDefault();
+                    // Skip if the control is not found
+                    if (control == null) continue;
+
+                    var propertyValue = typeof(Event).GetProperty(metadata.DatabaseField)?.GetValue(e);
+
+                    if (control is TextBox txt && propertyValue != null)
+                    {
+                        txt.Text = propertyValue.ToString();
+                    }
+                    else if (control is ComboBox comboBox && propertyValue != null)
+                    {
+                        comboBox.SelectedItem = propertyValue.ToString();
+                    }
+                    else if (control is DateTimePicker date && propertyValue is DateTime dateValue)
+                    {
+                        date.Value = dateValue;
+                    }
+                }
+            }
         }
 
         private void comboBoxCategory_SelectedIndexChanged(object sender, EventArgs e)

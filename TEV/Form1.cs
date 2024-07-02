@@ -84,8 +84,8 @@ namespace TEV
             {
                 DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
                 int selectedEventId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["id"].Value);
-
-                CreateEvent createEvent = new CreateEvent(selectedEventId, true);
+                Event selectedEvent = evnt.GetEventById(selectedEventId);
+                CreateEvent createEvent = new CreateEvent(selectedEvent, true);
                 createEvent.DataUpdated += new EventHandler(Form1_Load);
                 createEvent.ShowDialog();
             }
