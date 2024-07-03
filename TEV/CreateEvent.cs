@@ -46,8 +46,9 @@ namespace TEV
 
         public void FillFormFromEvent(Event e)
         {
-            comboBoxCategory.SelectedItem = e.category;
-            List<ControlMetadata> controlMetadataList = helper.GetControlMetadata(e.category);
+            this.evnt = e;
+            comboBoxCategory.SelectedItem = e.Category;
+            this.controlMetadataList = helper.GetControlMetadata(e.Category);
             helper.GenerateControls(controlMetadataList, panel1);
             foreach (var metadata in controlMetadataList)
             {
@@ -97,9 +98,9 @@ namespace TEV
                     return;
                 }
                 Event eventData = helper.RetrieveFormData(panel1, controlMetadataList);
-                eventData.category = category;
+                eventData.Category = category;
 
-                if (isEditMode)
+                if (!isEditMode)
                 {
                     bool success = evnt.InsertEvent(eventData);
                     if (success == true)
@@ -115,7 +116,8 @@ namespace TEV
                 }
                 else
                 {
-                    bool success = evnt.UpdateEvent(evnt);
+                    eventData.Id = evnt.Id;
+                    bool success = evnt.UpdateEvent(eventData);
                     if (success == true)
                     {
                         OnDataUpdated(EventArgs.Empty);// Trigger the event

@@ -43,9 +43,9 @@ namespace TEV
         {
             Event e = evnt.GetEventById(id);
 //          comboBoxCategory.SelectedItem = e.category;
-            List<ControlMetadata> controlMetadataList = helper.GetControlMetadata(e.category);
+            List<ControlMetadata> controlMetadataList = helper.GetControlMetadata(e.Category);
             helper.GenerateControls(controlMetadataList, panelControls);
-            helper.PopulateComboBoxs(e.category, panelControls);
+            helper.PopulateComboBoxs(e.Category, panelControls);
             foreach (var metadata in controlMetadataList)
             {
                 if (metadata.IsVisible)

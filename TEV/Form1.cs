@@ -52,7 +52,7 @@ namespace TEV
                 if (result == DialogResult.Yes)
                 {
                     // Perform the delete operation if the user clicked Yes
-                    evnt.id = int.Parse(id);
+                    evnt.Id = int.Parse(id);
                     bool success = evnt.DeleteEvent(evnt);
                     if (success == true)
                     {
