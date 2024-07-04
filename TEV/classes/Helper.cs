@@ -289,7 +289,16 @@ namespace TEV.classes
             {
                 if (reader.HasColumn(property.Name) && !reader.IsDBNull(reader.GetOrdinal(property.Name)))
                 {
-                    property.SetValue(obj, reader[property.Name]);
+                    try
+                    {
+                        property.SetValue(obj, reader[property.Name]);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        // Handle or log the exception as needed
+                        Console.WriteLine($"Error setting property {property.Name}: {ex.Message}");
+                    }
                 }
             }
         }

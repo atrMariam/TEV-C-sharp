@@ -83,7 +83,7 @@ namespace TEV
             if (dataGridView1.SelectedRows.Count > 0)
             {
                 DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
-                int selectedEventId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["id"].Value);
+                int selectedEventId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Id"].Value);
                 Event selectedEvent = evnt.GetEventById(selectedEventId);
                 CreateEvent createEvent = new CreateEvent(selectedEvent, true);
                 createEvent.DataUpdated += new EventHandler(Form1_Load);
@@ -99,8 +99,8 @@ namespace TEV
         {
             if (dataGridView1.SelectedRows.Count > 0)
             {
-                int selectedEventId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["id"].Value);
-                
+                int selectedEventId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Id"].Value);
+
                 string eventCategory = "";
                 using (SQLiteConnection con = new SQLiteConnection(connectionString))
                 {
@@ -124,6 +124,12 @@ namespace TEV
             {
                 MessageBox.Show("Please select an event first.");
             }
+        }
+
+        private void pictureBoxSetting_Click(object sender, EventArgs e)
+        {
+            ManageRelatedTables form = new ManageRelatedTables();
+            form.ShowDialog();
         }
     }
 }

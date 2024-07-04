@@ -68,7 +68,7 @@ namespace TEV.classes
             }
             return dt;
         }
-        public Event GetEventById(int eventId)
+        public Event GetEventById(long eventId)
         {
             Event eventObj = new Event();
             Helper helper = new Helper();
@@ -76,7 +76,7 @@ namespace TEV.classes
             using (SQLiteConnection con = new SQLiteConnection(connectionString))
             {
                 string sql = @"SELECT 
-                    e.Id,Code,c.name AS Category,Reference,Source,Occurrence_date,Notification_date,t.name as Event_type,Location,Involved_traffic,Description,ca.text AS Event_cause,Frequency,Severity,Security_recommendation,Classe,s.name AS Event_status,e.color as Color,Flight_phase,Altitude,Report_elaboration_date,Report_reception_date,Last_elm_reception_date,Recommendations_release_date,Evidence_reception_date
+                    e.Id,Code,c.name AS Category,Reference,Source,Occurrence_date,Notification_date,t.name as Event_type,e.Location,Involved_traffic,Description,ca.text AS Event_cause,Frequency,Severity,Security_recommendation,Classe,s.name AS Event_status,e.color as Color,Flight_phase,Altitude,Report_elaboration_date,Report_reception_date,Last_elm_reception_date,Recommendations_release_date,Evidence_reception_date
                     FROM events e
                     LEFT JOIN categories c ON e.Category_id = c.id
                     LEFT JOIN event_types t ON e.Event_type_id = t.id

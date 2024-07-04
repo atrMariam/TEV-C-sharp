@@ -16,11 +16,11 @@ namespace TEV
 {
     public partial class EventDetails : Form
     {
-        private int eventId;
+        private long eventId;
         private string eventCategory;
         Event evnt = new Event();
         Helper helper = new Helper();
-        public EventDetails(int id, string category)
+        public EventDetails(long id, string category)
         {
             InitializeComponent();
             eventId = id;
@@ -39,7 +39,7 @@ namespace TEV
             LoadEventDetails(eventId);
         }
 
-        public void LoadEventDetails(int id)
+        public void LoadEventDetails(long id)
         {
             Event e = evnt.GetEventById(id);
 //          comboBoxCategory.SelectedItem = e.category;
