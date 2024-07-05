@@ -62,19 +62,33 @@
             textBoxCategoryName = new TextBox();
             label1 = new Label();
             dataGridViewCategories = new DataGridView();
-            tabPage2 = new TabPage();
+            tabPageType = new TabPage();
+            groupBoxType = new GroupBox();
+            textBoxTypeName = new TextBox();
+            comboBoxTypeCategoryId = new ComboBox();
+            label4 = new Label();
+            label5 = new Label();
+            label3 = new Label();
+            textBoxTypeId = new TextBox();
+            buttonDeleteType = new Button();
+            buttonEditType = new Button();
+            buttonAddType = new Button();
+            dataGridViewTypes = new DataGridView();
             tabPage3 = new TabPage();
             tabControl1.SuspendLayout();
             tabPageCategories.SuspendLayout();
             groupBoxCategory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewCategories).BeginInit();
+            tabPageType.SuspendLayout();
+            groupBoxType.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTypes).BeginInit();
             SuspendLayout();
             // 
             // tabControl1
             // 
             tabControl1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tabControl1.Controls.Add(tabPageCategories);
-            tabControl1.Controls.Add(tabPage2);
+            tabControl1.Controls.Add(tabPageType);
             tabControl1.Controls.Add(tabPage3);
             tabControl1.Location = new Point(12, 12);
             tabControl1.Name = "tabControl1";
@@ -177,7 +191,7 @@
             textBoxCategoryId.Location = new Point(123, 31);
             textBoxCategoryId.Name = "textBoxCategoryId";
             textBoxCategoryId.ReadOnly = true;
-            textBoxCategoryId.Size = new Size(148, 23);
+            textBoxCategoryId.Size = new Size(227, 23);
             textBoxCategoryId.TabIndex = 27;
             // 
             // label2
@@ -423,7 +437,7 @@
             // 
             textBoxCategoryName.Location = new Point(123, 69);
             textBoxCategoryName.Name = "textBoxCategoryName";
-            textBoxCategoryName.Size = new Size(148, 23);
+            textBoxCategoryName.Size = new Size(227, 23);
             textBoxCategoryName.TabIndex = 1;
             // 
             // label1
@@ -445,15 +459,133 @@
             dataGridViewCategories.TabIndex = 0;
             dataGridViewCategories.RowHeaderMouseClick += dataGridViewCategories_RowHeaderMouseClick;
             // 
-            // tabPage2
+            // tabPageType
             // 
-            tabPage2.Location = new Point(4, 24);
-            tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(922, 542);
-            tabPage2.TabIndex = 1;
-            tabPage2.Text = "tabPage2";
-            tabPage2.UseVisualStyleBackColor = true;
+            tabPageType.Controls.Add(groupBoxType);
+            tabPageType.Controls.Add(buttonDeleteType);
+            tabPageType.Controls.Add(buttonEditType);
+            tabPageType.Controls.Add(buttonAddType);
+            tabPageType.Controls.Add(dataGridViewTypes);
+            tabPageType.Location = new Point(4, 24);
+            tabPageType.Name = "tabPageType";
+            tabPageType.Padding = new Padding(3);
+            tabPageType.Size = new Size(922, 542);
+            tabPageType.TabIndex = 1;
+            tabPageType.Text = "Types";
+            tabPageType.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxType
+            // 
+            groupBoxType.Controls.Add(textBoxTypeName);
+            groupBoxType.Controls.Add(comboBoxTypeCategoryId);
+            groupBoxType.Controls.Add(label4);
+            groupBoxType.Controls.Add(label5);
+            groupBoxType.Controls.Add(label3);
+            groupBoxType.Controls.Add(textBoxTypeId);
+            groupBoxType.Location = new Point(22, 21);
+            groupBoxType.Name = "groupBoxType";
+            groupBoxType.Size = new Size(440, 217);
+            groupBoxType.TabIndex = 40;
+            groupBoxType.TabStop = false;
+            groupBoxType.Text = "Type";
+            // 
+            // textBoxTypeName
+            // 
+            textBoxTypeName.Location = new Point(134, 72);
+            textBoxTypeName.Name = "textBoxTypeName";
+            textBoxTypeName.Size = new Size(208, 23);
+            textBoxTypeName.TabIndex = 35;
+            // 
+            // comboBoxTypeCategoryId
+            // 
+            comboBoxTypeCategoryId.FormattingEnabled = true;
+            comboBoxTypeCategoryId.Location = new Point(134, 115);
+            comboBoxTypeCategoryId.Name = "comboBoxTypeCategoryId";
+            comboBoxTypeCategoryId.Size = new Size(208, 23);
+            comboBoxTypeCategoryId.TabIndex = 39;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(17, 75);
+            label4.Name = "label4";
+            label4.Size = new Size(32, 15);
+            label4.TabIndex = 34;
+            label4.Text = "nom";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(17, 118);
+            label5.Name = "label5";
+            label5.Size = new Size(58, 15);
+            label5.TabIndex = 38;
+            label5.Text = "Categorie";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(17, 34);
+            label3.Name = "label3";
+            label3.Size = new Size(18, 15);
+            label3.TabIndex = 36;
+            label3.Text = "ID";
+            // 
+            // textBoxTypeId
+            // 
+            textBoxTypeId.Location = new Point(134, 34);
+            textBoxTypeId.Name = "textBoxTypeId";
+            textBoxTypeId.ReadOnly = true;
+            textBoxTypeId.Size = new Size(208, 23);
+            textBoxTypeId.TabIndex = 37;
+            // 
+            // buttonDeleteType
+            // 
+            buttonDeleteType.Anchor = AnchorStyles.Bottom;
+            buttonDeleteType.BackColor = Color.FromArgb(255, 128, 128);
+            buttonDeleteType.ForeColor = Color.Black;
+            buttonDeleteType.Location = new Point(326, 478);
+            buttonDeleteType.Name = "buttonDeleteType";
+            buttonDeleteType.Size = new Size(78, 38);
+            buttonDeleteType.TabIndex = 33;
+            buttonDeleteType.Text = "Delete";
+            buttonDeleteType.UseVisualStyleBackColor = false;
+            buttonDeleteType.Click += buttonDeleteType_Click;
+            // 
+            // buttonEditType
+            // 
+            buttonEditType.Anchor = AnchorStyles.Bottom;
+            buttonEditType.BackColor = Color.FromArgb(255, 192, 128);
+            buttonEditType.Location = new Point(201, 478);
+            buttonEditType.Name = "buttonEditType";
+            buttonEditType.Size = new Size(72, 38);
+            buttonEditType.TabIndex = 32;
+            buttonEditType.Text = "Editer";
+            buttonEditType.UseVisualStyleBackColor = false;
+            buttonEditType.Click += buttonEditType_Click;
+            // 
+            // buttonAddType
+            // 
+            buttonAddType.Anchor = AnchorStyles.Bottom;
+            buttonAddType.BackColor = Color.FromArgb(128, 128, 255);
+            buttonAddType.ForeColor = Color.Black;
+            buttonAddType.Location = new Point(79, 478);
+            buttonAddType.Name = "buttonAddType";
+            buttonAddType.Size = new Size(86, 38);
+            buttonAddType.TabIndex = 31;
+            buttonAddType.Text = "Ajouter";
+            buttonAddType.UseVisualStyleBackColor = false;
+            buttonAddType.Click += buttonAddType_Click;
+            // 
+            // dataGridViewTypes
+            // 
+            dataGridViewTypes.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dataGridViewTypes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewTypes.Location = new Point(477, 28);
+            dataGridViewTypes.Name = "dataGridViewTypes";
+            dataGridViewTypes.Size = new Size(427, 488);
+            dataGridViewTypes.TabIndex = 1;
+            dataGridViewTypes.RowHeaderMouseClick += dataGridViewTypes_RowHeaderMouseClick;
             // 
             // tabPage3
             // 
@@ -479,6 +611,10 @@
             groupBoxCategory.ResumeLayout(false);
             groupBoxCategory.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewCategories).EndInit();
+            tabPageType.ResumeLayout(false);
+            groupBoxType.ResumeLayout(false);
+            groupBoxType.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTypes).EndInit();
             ResumeLayout(false);
         }
 
@@ -486,7 +622,7 @@
 
         private TabControl tabControl1;
         private TabPage tabPageCategories;
-        private TabPage tabPage2;
+        private TabPage tabPageType;
         private GroupBox groupBoxCategory;
         private DataGridView dataGridViewCategories;
         private TabPage tabPage3;
@@ -520,5 +656,16 @@
         private Button buttonAddCategory;
         private TextBox textBoxCategoryId;
         private Label label2;
+        private DataGridView dataGridViewTypes;
+        private Button buttonDeleteType;
+        private Button buttonEditType;
+        private Button buttonAddType;
+        private ComboBox comboBoxTypeCategoryId;
+        private Label label5;
+        private TextBox textBoxTypeId;
+        private Label label3;
+        private TextBox textBoxTypeName;
+        private Label label4;
+        private GroupBox groupBoxType;
     }
 }

@@ -26,7 +26,7 @@ namespace TEV
 
         private void CreateEvent_Load(object sender, EventArgs e)
         {
-            List<string> categories = evnt.selectCategories();
+            List<string> categories = (new Category()).selectCategories();
             // Populate the comboBoxUserType with categories from the database
             comboBoxCategory.Items.Clear(); // Clear existing items if any
             foreach (string category in categories)

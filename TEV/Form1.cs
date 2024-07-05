@@ -1,9 +1,7 @@
-using Microsoft.VisualBasic.ApplicationServices;
 using System.Data;
 using System.Data.SQLite;
 using System.Windows.Forms;
 using TEV.classes;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace TEV
 {

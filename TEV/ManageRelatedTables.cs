@@ -1,16 +1,12 @@
-﻿using Microsoft.VisualBasic.ApplicationServices;
-using System.Data;
-using System.Data.SQLite;
-using System.Windows.Forms;
-using System.Xml.Linq;
+﻿using System.Data;
 using TEV.classes;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace TEV
 {
     public partial class ManageRelatedTables : Form
     {
         Category category = new();
+        EventType type = new();
         Helper helper = new();
         public ManageRelatedTables()
         {
@@ -20,6 +16,7 @@ namespace TEV
         private void ManageRelatedTables_Load(object sender, EventArgs e)
         {
             LoadDataCategories();
+            LoadDataTypes();
         }
 
         private void LoadDataCategories()
@@ -27,11 +24,22 @@ namespace TEV
             DataTable dt = category.Select();
             dataGridViewCategories.DataSource = dt;
         }
+        private void LoadDataTypes()
+        {
+            List<string> categories = category.selectCategories();
+            comboBoxTypeCategoryId.Items.Clear();
+            foreach (string category in categories)
+            {
+                comboBoxTypeCategoryId.Items.Add(category);
+            }
+            DataTable dt = type.Select();
+            dataGridViewTypes.DataSource = dt;
+        }
 
         private void buttonAddCategory_Click(object sender, EventArgs e)
         {
             // get the values from the input fields
-            category = RetrieveFormData(groupBoxCategory);
+            category = RetrieveCategoryFormData();
 
             bool success = category.Insert(category);
             if (success == true)
@@ -47,9 +55,12 @@ namespace TEV
             LoadDataCategories();
         }
 
-        public Category RetrieveFormData(Control parentControl)
+        public Category RetrieveCategoryFormData()
         {
-            category.id = int.Parse(textBoxCategoryId.Text);
+            if (textBoxCategoryId.Text != "")
+            {
+                category.id = int.Parse(textBoxCategoryId.Text);
+            }
             category.name = textBoxCategoryName.Text;
             category.show_code = checkBoxshow_code.Checked;
             category.show_reference = checkBoxshow_reference.Checked;
@@ -116,7 +127,7 @@ namespace TEV
         {
             if (dataGridViewCategories.SelectedRows.Count > 0)
             {
-                category = RetrieveFormData(groupBoxCategory);
+                category = RetrieveCategoryFormData();
                 // update data in database
                 bool success = category.Update(category);
                 if (success == true)
@@ -158,6 +169,60 @@ namespace TEV
             else
             {
                 MessageBox.Show("Please select a row first.");
+            }
+        }
+
+        private void buttonAddType_Click(object sender, EventArgs e)
+        {
+            // get the values from the input fields
+            type = RetrieveTypeFormData();
+
+            bool success = type.Insert(type);
+            if (success == true)
+            {
+                MessageBox.Show("New Type Successfully Inserted");
+                helper.Clear(groupBoxType);
+            }
+            else
+            {
+                MessageBox.Show("Failed to Add New Type. Try Again");
+            }
+            //load the data on data gridview
+            LoadDataTypes();
+        }
+
+        private EventType RetrieveTypeFormData()
+        {
+            if (textBoxTypeId.Text != "")
+            {
+                type.Id = int.Parse(textBoxTypeId.Text);
+            }
+            type.Name = textBoxTypeName.Text;
+            type.Category_id = (category.getCategoryByName(comboBoxTypeCategoryId.SelectedItem.ToString())).id;
+
+            return type;
+
+        }
+
+        private void buttonEditType_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonDeleteType_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridViewTypes_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            int rowIndex = e.RowIndex;
+            // Ensure the row is not the "new row" (the blank row at the end)
+            if (!dataGridViewCategories.Rows[rowIndex].IsNewRow)
+            {
+                textBoxTypeId.Text = dataGridViewTypes.Rows[rowIndex].Cells["id"].Value.ToString();
+                textBoxTypeName.Text = dataGridViewTypes.Rows[rowIndex].Cells["name"].Value.ToString();
+                // category ??
             }
         }
     }

@@ -65,6 +65,61 @@ namespace TEV.classes
             return dt;
         }
 
+        public Category getCategoryByName(string name)
+        {
+            Category category = new ();
+            try
+            {
+                using (SQLiteConnection con = new SQLiteConnection(connectionString))
+                {
+                    string sql = "SELECT id,name FROM categories WHERE name=@name";
+                    SQLiteCommand cmd = new SQLiteCommand(sql, con);
+                    cmd.Parameters.AddWithValue("@name", name);
+
+                    con.Open();
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            category.id = reader.GetInt32(reader.GetOrdinal("id"));
+                            category.name = reader.GetString(reader.GetOrdinal("name"));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading category: " + ex.Message);
+            }
+            return category;
+        }
+
+        public List<string> selectCategories()
+        {
+            List<string> categories = new List<string>();
+            try
+            {
+                using (SQLiteConnection con = new SQLiteConnection(connectionString))
+                {
+                    string sql = "SELECT name FROM categories";
+                    SQLiteCommand cmd = new SQLiteCommand(sql, con);
+                    con.Open();
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            categories.Add(reader.GetString(reader.GetOrdinal("name")));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading categories: " + ex.Message);
+            }
+            return categories;
+        }
+
         public bool Insert(Category c)
         {
             //creating a default return type and etting its value to false

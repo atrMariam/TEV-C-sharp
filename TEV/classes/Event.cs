@@ -98,31 +98,7 @@ namespace TEV.classes
 
             return eventObj;
         }
-        public List<string> selectCategories()
-       {
-            List<string> categories = new List<string>();
-            try
-            {
-                using (SQLiteConnection con = new SQLiteConnection(connectionString))
-                {
-                    string sql = "SELECT name FROM categories";
-                    SQLiteCommand cmd = new SQLiteCommand(sql, con);
-                    con.Open();
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            categories.Add(reader.GetString(reader.GetOrdinal("name")));
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading categories: " + ex.Message);
-            }
-            return categories;
-        }
+        
         public List<string> selectCategoryByEventId(String eventId)
         {
             List<string> categories = new List<string>();
