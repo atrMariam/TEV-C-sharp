@@ -25,7 +25,8 @@ namespace TEV.classes
             DataTable dt = new DataTable();
             try
             {
-                string sql = "SELECT * FROM event_types";
+                string sql = @"SELECT t.id, t.name, c.name AS category FROM event_types t
+                 LEFT JOIN categories c ON t.Category_id = c.id";
                 SQLiteCommand cmd = new SQLiteCommand(sql, con);
                 SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
                 con.Open();
@@ -103,12 +104,29 @@ namespace TEV.classes
             SQLiteConnection con = new SQLiteConnection(connectionString);
             try
             {
-                string sql = "DELETE FROM event_types WHERE id=@id";
-                SQLiteCommand cmd = new SQLiteCommand(sql, con);
-                cmd.Parameters.AddWithValue("@id", t.Id);
                 con.Open();
-                int rows = cmd.ExecuteNonQuery();
-                isSuccess = rows > 0;
+
+                // Check if the event tyoe is related to any events
+                string checkSql = "SELECT COUNT(*) FROM events WHERE event_type_id = @eventType";
+                SQLiteCommand checkCmd = new SQLiteCommand(checkSql, con);
+                checkCmd.Parameters.AddWithValue("@eventType", t.Id);
+
+                int relatedCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                if (relatedCount == 0)
+                {
+                    // No related events, proceed with deletion
+                    string deleteSql = "DELETE FROM event_types WHERE id = @id";
+                    SQLiteCommand deleteCmd = new SQLiteCommand(deleteSql, con);
+                    deleteCmd.Parameters.AddWithValue("@id", t.Id);
+
+                    int rows = deleteCmd.ExecuteNonQuery();
+                    isSuccess = rows > 0;
+                }
+                else
+                {
+                    MessageBox.Show("Cannot delete this event type because it is related to existing events.");
+                }
             }
             catch (Exception ex)
             {

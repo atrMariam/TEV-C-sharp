@@ -121,7 +121,7 @@ namespace TEV
                     if (success == true)
                     {
                         OnDataUpdated(EventArgs.Empty);// Trigger the event
-                        MessageBox.Show("New Event Successfully updated");
+                        MessageBox.Show("Event Successfully updated");
                         helper.Clear(panel1);
                     }
                     else

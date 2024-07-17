@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Windows.Forms;
 using TEV.classes;
 
 namespace TEV
@@ -6,7 +7,7 @@ namespace TEV
     public partial class ManageRelatedTables : Form
     {
         Category category = new();
-        EventType type = new();
+        EventType eventType = new();
         Helper helper = new();
         public ManageRelatedTables()
         {
@@ -27,12 +28,12 @@ namespace TEV
         private void LoadDataTypes()
         {
             List<string> categories = category.selectCategories();
-            comboBoxTypeCategoryId.Items.Clear();
+            comboBoxTypeCategory.Items.Clear();
             foreach (string category in categories)
             {
-                comboBoxTypeCategoryId.Items.Add(category);
+                comboBoxTypeCategory.Items.Add(category);
             }
-            DataTable dt = type.Select();
+            DataTable dt = eventType.Select();
             dataGridViewTypes.DataSource = dt;
         }
 
@@ -150,7 +151,16 @@ namespace TEV
 
         private void buttonDeleteCategory_Click(object sender, EventArgs e)
         {
-            if (dataGridViewCategories.SelectedRows.Count > 0)
+            // Show a confirmation dialog with Yes and No buttons
+            DialogResult result = MessageBox.Show(
+                "Are you sure you want to delete this?",
+                "Confirm Delete",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
+
+            // Check the result of the confirmation dialog
+            if (result == DialogResult.Yes)
             {
                 category.id = int.Parse(textBoxCategoryId.Text);
                 bool success = category.Delete(category);
@@ -168,16 +178,17 @@ namespace TEV
             }
             else
             {
-                MessageBox.Show("Please select a row first.");
+                // The user clicked No, so cancel the delete operation
+                MessageBox.Show("Delete operation canceled.");
             }
         }
 
         private void buttonAddType_Click(object sender, EventArgs e)
         {
             // get the values from the input fields
-            type = RetrieveTypeFormData();
+            eventType = RetrieveTypeFormData();
 
-            bool success = type.Insert(type);
+            bool success = eventType.Insert(eventType);
             if (success == true)
             {
                 MessageBox.Show("New Type Successfully Inserted");
@@ -195,23 +206,68 @@ namespace TEV
         {
             if (textBoxTypeId.Text != "")
             {
-                type.Id = int.Parse(textBoxTypeId.Text);
+                eventType.Id = int.Parse(textBoxTypeId.Text);
             }
-            type.Name = textBoxTypeName.Text;
-            type.Category_id = (category.getCategoryByName(comboBoxTypeCategoryId.SelectedItem.ToString())).id;
+            eventType.Name = textBoxTypeName.Text;
+            eventType.Category_id = (category.getCategoryByName(comboBoxTypeCategory.SelectedItem.ToString())).id;
 
-            return type;
+            return eventType;
 
         }
 
         private void buttonEditType_Click(object sender, EventArgs e)
         {
+            // get the values from the input fields
+            eventType = RetrieveTypeFormData();
 
+            bool success = eventType.Update(eventType);
+            if (success == true)
+            {
+                MessageBox.Show("Event Type Successfully Updated");
+                helper.Clear(groupBoxType);
+            }
+            else
+            {
+                MessageBox.Show("Failed to Update Event Type. Try Again");
+            }
+            //load the data on data gridview
+            LoadDataTypes();
         }
 
         private void buttonDeleteType_Click(object sender, EventArgs e)
         {
+            // get the values from the input fields
+            eventType = RetrieveTypeFormData();
+            // Show a confirmation dialog with Yes and No buttons
+            DialogResult result = MessageBox.Show(
+                "Are you sure you want to delete this?",
+                "Confirm Delete",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
 
+            // Check the result of the confirmation dialog
+            if (result == DialogResult.Yes)
+            {
+
+                // Perform the delete operation if the user clicked Yes
+                bool success = eventType.Delete(eventType);
+                if (success == true)
+                {
+                    MessageBox.Show("Event Type has been successfully deleted.");
+                    LoadDataTypes();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to delete the event type. Try again.");
+                }
+            }
+            else
+            {
+                // The user clicked No, so cancel the delete operation
+                MessageBox.Show("Delete operation canceled.");
+            }
+            
         }
 
         private void dataGridViewTypes_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -222,7 +278,7 @@ namespace TEV
             {
                 textBoxTypeId.Text = dataGridViewTypes.Rows[rowIndex].Cells["id"].Value.ToString();
                 textBoxTypeName.Text = dataGridViewTypes.Rows[rowIndex].Cells["name"].Value.ToString();
-                // category ??
+                comboBoxTypeCategory.SelectedItem = dataGridViewTypes.Rows[rowIndex].Cells["category"].Value.ToString();
             }
         }
     }

@@ -236,12 +236,29 @@ namespace TEV.classes
             SQLiteConnection con = new SQLiteConnection(connectionString);
             try
             {
-                string sql = "DELETE FROM categories WHERE id=@id";
-                SQLiteCommand cmd = new SQLiteCommand(sql, con);
-                cmd.Parameters.AddWithValue("@id", c.id);
                 con.Open();
-                int rows = cmd.ExecuteNonQuery();
-                isSuccess = rows > 0;
+
+                // Check if the event tyoe is related to any events
+                string checkSql = "SELECT COUNT(*) FROM event_types WHERE category_id = @category";
+                SQLiteCommand checkCmd = new SQLiteCommand(checkSql, con);
+                checkCmd.Parameters.AddWithValue("@category", c.id);
+
+                int relatedCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                if (relatedCount == 0)
+                {
+                    // No related events, proceed with deletion
+                    string deleteSql = "DELETE FROM categories WHERE id=@id";
+                    SQLiteCommand deleteCmd = new SQLiteCommand(deleteSql, con);
+                    deleteCmd.Parameters.AddWithValue("@id", c.id);
+
+                    int rows = deleteCmd.ExecuteNonQuery();
+                    isSuccess = rows > 0;
+                }
+                else
+                {
+                    MessageBox.Show("Cannot delete this category because it is related to existing event types.");
+                }
             }
             catch (Exception ex)
             {
